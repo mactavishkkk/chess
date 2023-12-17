@@ -17,5 +17,11 @@
         {
             return Parts[row, col];
         }
+
+        public void insertPart(Part part, Position position)
+        {
+            Parts[position.Row, position.Column] = part;
+            part.Position = position;
+        }
     }
 }

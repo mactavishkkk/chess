@@ -1,5 +1,6 @@
 ﻿using chess;
 using chess.Board;
+using chess.Chess;
 
 internal class Program
 {
@@ -7,8 +8,9 @@ internal class Program
     {
         Plank plank;
         plank = new Plank(8, 8);
+        plank.insertPart(new King(plank, Color.White), new Position(0, 4));
+        plank.insertPart(new King(plank, Color.Black), new Position(7, 3));
 
         Screen.PrintBoard(plank);
-        Console.ReadLine();
     }
 }

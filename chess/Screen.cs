@@ -11,7 +11,7 @@ namespace chess
                 for (int j = 0; j < plank.Columns; j++)
                 {
                     if (plank.getPart(i, j) == null)
-                        Console.Write(" - ");
+                        Console.Write("- ");
                     else
                         Console.Write(plank.getPart(i, j) + " ");
                 }
