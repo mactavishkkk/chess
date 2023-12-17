@@ -1,14 +1,14 @@
-﻿using chess.Board;
+﻿using chess;
+using chess.Board;
 
 internal class Program
 {
     private static void Main(string[] args)
     {
-        Position position;
+        Plank plank;
+        plank = new Plank(8, 8);
 
-        position = new Position(4, 3);
-
-        Console.WriteLine(position);
+        Screen.PrintBoard(plank);
         Console.ReadLine();
     }
 }
