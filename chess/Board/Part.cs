@@ -13,5 +13,10 @@
             Board = board;
             Movements = 0;
         }
+
+        public void incrementMoviment()
+        {
+            Movements++;
+        }
     }
 }

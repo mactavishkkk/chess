@@ -38,6 +38,17 @@
             part.Position = position;
         }
 
+        public Part removePart(Position position)
+        {
+            if (getPart(position) == null)
+                return null;
+
+            Part aux = getPart(position);
+            aux.Position = null;
+            Parts[position.Row, position.Column] = null;
+            return aux;
+        }
+
         public bool validPosition(Position position)
         {
             if (position.Row > 8 || position.Column > 8 || position.Row < 0 || position.Column < 0)
