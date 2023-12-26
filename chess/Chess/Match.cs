@@ -7,12 +7,14 @@ namespace chess.Chess
         public Plank plank { get; private set; }
         private int turn;
         private Color playerNow;
+        public bool finish { get; private set; }
 
         public Match()
         {
             plank = new Plank(8, 8);
             turn = 1;
             playerNow = Color.White;
+            finish = false;
             insertParts();
         }
 

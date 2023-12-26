@@ -13,6 +13,12 @@
 
         public Position() { }
 
+        public void valueDefine(int row, int column)
+        {
+            Row = row;
+            Column = column;
+        }
+
         public override string ToString()
         {
             return "Linha: " + Row + ", Coluna: " + Column;

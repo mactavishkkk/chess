@@ -51,7 +51,7 @@
 
         public bool validPosition(Position position)
         {
-            if (position.Row > 8 || position.Column > 8 || position.Row < 0 || position.Column < 0)
+            if (position.Row > 7 || position.Column > 7 || position.Row < 0 || position.Column < 0)
             {
                 return false;
             }

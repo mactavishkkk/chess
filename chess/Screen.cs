@@ -1,4 +1,6 @@
 ﻿using chess.Board;
+using chess.Chess;
+using System.Numerics;
 
 namespace chess
 {
@@ -11,30 +13,66 @@ namespace chess
                 Console.Write(8 - i + " ");
                 for (int j = 0; j < plank.Columns; j++)
                 {
-                    if (plank.getPart(i, j) == null)
-                        Console.Write("- ");
-                    else
-                        printPart(plank.getPart(i, j));
+                    PrintPart(plank.getPart(i, j));
                 }
                 Console.WriteLine();
             }
             Console.WriteLine("  A B C D E F G H");
         }
 
-        public static void printPart(Part part)
+        public static void PrintBoard(Plank plank, bool[,] possiblePositions)
         {
-            if (part.Color == Color.White)
+            ConsoleColor backgroundDefault = Console.BackgroundColor;
+            ConsoleColor backgroundAlter = ConsoleColor.DarkGray;
+
+            for (int i = 0; i < plank.Rows; i++)
             {
-                Console.Write(part);
-                Console.Write(" ");
+                Console.Write(8 - i + " ");
+                for (int j = 0; j < plank.Columns; j++)
+                {
+                    if (possiblePositions[i, j])
+                    {
+                        Console.BackgroundColor = backgroundAlter;
+                    } else
+                    {
+                        Console.BackgroundColor = backgroundDefault;
+                    }
+                    PrintPart(plank.getPart(i, j));
+                }
+                Console.WriteLine();
+                Console.BackgroundColor = backgroundDefault;
+            }
+            Console.WriteLine("  A B C D E F G H");
+        }
+
+        public static void PrintPart(Part part)
+        {
+            if (part == null)
+            {
+                Console.Write("- ");
             } else
             {
-                ConsoleColor aux = Console.ForegroundColor;
-                Console.ForegroundColor = ConsoleColor.DarkYellow;
-                Console.Write(part);
-                Console.Write(" ");
-                Console.ForegroundColor = aux;
+                if (part.Color == Color.White)
+                {
+                    Console.Write(part);
+                    Console.Write(" ");
+                } else
+                {
+                    ConsoleColor aux = Console.ForegroundColor;
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    Console.Write(part);
+                    Console.Write(" ");
+                    Console.ForegroundColor = aux;
+                }
             }
+        }
+
+        public static ChessPosition ReadChessPosition()
+        {
+            string str = Console.ReadLine();
+            char column = str[0];
+            int row = int.Parse(str[1] + "");
+            return new ChessPosition(column, row);
         }
     }
 }
