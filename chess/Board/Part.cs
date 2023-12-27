@@ -19,6 +19,19 @@
             Movements++;
         }
 
+        public bool possibleMovimentExists()
+        {
+            bool[,] mat = possibleMoviments();
+
+            for (int i = 0; i < Board.Rows; i++)
+                for (int j = 0; j < Board.Columns; j++)
+                    if (mat[i, j])
+                        return true;
+
+            return false;
+
+        }
+
         public abstract bool[,] possibleMoviments();
     }
 }

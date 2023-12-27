@@ -5,8 +5,8 @@ namespace chess.Chess
     internal class Match
     {
         public Plank plank { get; private set; }
-        private int turn;
-        private Color playerNow;
+        public int turn { get; private set; }
+        public Color playerNow;
         public bool finish { get; private set; }
 
         public Match()
@@ -24,6 +24,32 @@ namespace chess.Chess
             part.incrementMoviment();
             Part capturedPart = plank.removePart(destiny);
             plank.insertPart(part, destiny);
+        }
+
+        public void makeMove(Position origin, Position destiny)
+        {
+            movimentExecute(origin, destiny);
+            turn++;
+            changePlayer();
+        }
+
+        public void validateOriginPosition(Position origin)
+        {
+            if (plank.getPart(origin) == null)
+                throw new PlankException("Não existe peça na posição de origem escolhida!");
+
+            if (playerNow != plank.getPart(origin).Color)
+                throw new PlankException("A peça de origem escolhida não é sua");
+
+            if (!plank.getPart(origin).possibleMovimentExists())
+                throw new PlankException("Não há movimentos possíveis para a peça de origem escolhida!");
+        }
+
+        private void changePlayer()
+        {
+            if (playerNow == Color.White)
+                playerNow = Color.Black;
+            else playerNow = Color.White;
         }
 
         private void insertParts()

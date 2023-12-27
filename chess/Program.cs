@@ -11,25 +11,40 @@ internal class Program
             Match match = new Match();
             while (!match.finish)
             {
-                Console.Clear();
-                Screen.PrintBoard(match.plank);
+                try
+                {
+                    Console.Clear();
+                    Screen.PrintBoard(match.plank);
+                    Console.WriteLine();
+                    Console.WriteLine("Turno: " + match.turn);
 
-                Console.WriteLine();
+                    if (match.playerNow == Color.White)
+                        Console.WriteLine("Aguardando jogada das peças BRANCAS");
+                    else Console.WriteLine("Aguardando jogada das peças PRETAS");
 
-                Console.Write("Origem: ");
-                Position origin = Screen.ReadChessPosition().toPosition();
+                    Console.WriteLine();
 
-                bool[,] possiblePositions = match.plank.getPart(origin).possibleMoviments();
+                    Console.Write("Origem: ");
+                    Position origin = Screen.ReadChessPosition().toPosition();
+                    match.validateOriginPosition(origin);
 
-                Console.Clear();
-                Screen.PrintBoard(match.plank, possiblePositions);
+                    bool[,] possiblePositions = match.plank.getPart(origin).possibleMoviments();
 
-                Console.WriteLine();
+                    Console.Clear();
+                    Screen.PrintBoard(match.plank, possiblePositions);
 
-                Console.Write("Destino: ");
-                Position destiny = Screen.ReadChessPosition().toPosition();
+                    Console.WriteLine();
 
-                match.movimentExecute(origin, destiny);
+                    Console.Write("Destino: ");
+                    Position destiny = Screen.ReadChessPosition().toPosition();
+
+                    match.makeMove(origin, destiny);
+                } catch (PlankException e)
+                {
+                    Console.WriteLine(e.Message);
+                    Console.Write("Pressione 'Enter' para tentar novamente");
+                    Console.ReadLine();
+                }
             }
         } catch (Exception e)
         {
