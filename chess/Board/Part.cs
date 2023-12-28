@@ -32,6 +32,11 @@
 
         }
 
+        public bool canMoveTo(Position position)
+        {
+            return possibleMoviments()[position.Row, position.Column];
+        }
+
         public abstract bool[,] possibleMoviments();
     }
 }

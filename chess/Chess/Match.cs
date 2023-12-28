@@ -8,6 +8,8 @@ namespace chess.Chess
         public int turn { get; private set; }
         public Color playerNow;
         public bool finish { get; private set; }
+        private HashSet<Part> parts;
+        private HashSet<Part> capturedsParts;
 
         public Match()
         {
@@ -15,6 +17,8 @@ namespace chess.Chess
             turn = 1;
             playerNow = Color.White;
             finish = false;
+            parts = new HashSet<Part>();
+            capturedsParts = new HashSet<Part>();
             insertParts();
         }
 
@@ -24,6 +28,9 @@ namespace chess.Chess
             part.incrementMoviment();
             Part capturedPart = plank.removePart(destiny);
             plank.insertPart(part, destiny);
+
+            if (capturedPart != null)
+                capturedsParts.Add(capturedPart);
         }
 
         public void makeMove(Position origin, Position destiny)
@@ -45,6 +52,12 @@ namespace chess.Chess
                 throw new PlankException("Não há movimentos possíveis para a peça de origem escolhida!");
         }
 
+        public void validateDestinyPosition(Position origin, Position destiny)
+        {
+            if (!plank.getPart(origin).canMoveTo(destiny))
+                throw new PlankException("Posição de destino inválida!");
+        }
+
         private void changePlayer()
         {
             if (playerNow == Color.White)
@@ -52,15 +65,48 @@ namespace chess.Chess
             else playerNow = Color.White;
         }
 
+        public HashSet<Part> partsInGame(Color color)
+        {
+            HashSet<Part> aux = new HashSet<Part>();
+            foreach (Part part in parts)
+            {
+                if (part.Color == color)
+                {
+                    aux.Add(part);
+                }
+            }
+            aux.ExceptWith(capturedParts(color));
+            return aux;
+        }
+
+        public HashSet<Part> capturedParts(Color color)
+        {
+            HashSet<Part> aux = new HashSet<Part>();
+            foreach (Part part in capturedsParts)
+            {
+                if (part.Color == color)
+                {
+                    aux.Add(part);
+                }
+            }
+            return aux;
+        }
+
+        public void insertNewPart(char column, int row, Part part)
+        {
+            plank.insertPart(part, new ChessPosition(column, row).toPosition());
+            parts.Add(part);
+        }
+
         private void insertParts()
         {
-            plank.insertPart(new Tower(plank, Color.Black), new ChessPosition('A', 8).toPosition());
-            plank.insertPart(new Tower(plank, Color.Black), new ChessPosition('H', 8).toPosition());
-            plank.insertPart(new Tower(plank, Color.White), new ChessPosition('A', 1).toPosition());
-            plank.insertPart(new Tower(plank, Color.White), new ChessPosition('H', 1).toPosition());
+            insertNewPart('A', 8, new Tower(plank, Color.Black));
+            insertNewPart('H', 8, new Tower(plank, Color.Black));
+            insertNewPart('A', 1, new Tower(plank, Color.White));
+            insertNewPart('H', 1, new Tower(plank, Color.White));
 
-            plank.insertPart(new King(plank, Color.Black), new Position(0, 3));
-            plank.insertPart(new King(plank, Color.White), new Position(7, 4));
+            insertNewPart('D', 8, new King(plank, Color.Black));
+            insertNewPart('E', 1, new King(plank, Color.White));
         }
     }
 }

@@ -37,6 +37,7 @@ internal class Program
 
                     Console.Write("Destino: ");
                     Position destiny = Screen.ReadChessPosition().toPosition();
+                    match.validateDestinyPosition(origin, destiny);
 
                     match.makeMove(origin, destiny);
                 } catch (PlankException e)
