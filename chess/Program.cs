@@ -14,13 +14,7 @@ internal class Program
                 try
                 {
                     Console.Clear();
-                    Screen.PrintBoard(match.plank);
-                    Console.WriteLine();
-                    Console.WriteLine("Turno: " + match.turn);
-
-                    if (match.playerNow == Color.White)
-                        Console.WriteLine("Aguardando jogada das peças BRANCAS");
-                    else Console.WriteLine("Aguardando jogada das peças PRETAS");
+                    Screen.printHud(match);
 
                     Console.WriteLine();
 

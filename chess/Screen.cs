@@ -1,11 +1,49 @@
 ﻿using chess.Board;
 using chess.Chess;
 using System.Numerics;
+using System.Text.RegularExpressions;
 
 namespace chess
 {
     internal class Screen
     {
+        public static void printHud(Chess.Match match)
+        {
+            Screen.PrintBoard(match.plank);
+            Console.WriteLine();
+            printPartsCaptured(match);
+            Console.WriteLine("Turno: " + match.turn);
+
+            if (match.playerNow == Color.White)
+                Console.WriteLine("Aguardando jogada das peças BRANCAS");
+            else Console.WriteLine("Aguardando jogada das peças PRETAS");
+        }
+
+        public static void printPartsCaptured(Chess.Match match)
+        {
+            Console.WriteLine("Peças capturadas: ");
+            Console.Write("Brancas: ");
+            printSet(match.capturedParts(Color.White));
+
+            Console.Write(" Pretas: ");
+            ConsoleColor aux = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            printSet(match.capturedParts(Color.Black));
+
+            Console.WriteLine();
+            Console.WriteLine();
+        }
+
+        public static void printSet(HashSet<Part> parts)
+        {
+            Console.Write("[");
+            foreach (Part part in parts)
+            {
+                Console.Write(" " + part + " ");
+            }
+            Console.Write("]");
+        }
+
         public static void PrintBoard(Plank plank)
         {
             for (int i = 0; i < plank.Rows; i++)
