@@ -41,6 +41,8 @@ internal class Program
                     Console.ReadLine();
                 }
             }
+            Console.Clear();
+            Screen.printHud(match);
         } catch (Exception e)
         {
             Console.WriteLine(e.Message);

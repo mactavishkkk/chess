@@ -62,8 +62,14 @@ namespace chess.Chess
                 check = true;
             else check = false;
 
-            turn++;
-            changePlayer();
+            if (itsInCheckMate(adversary(playerNow)))
+            {
+                finish = true;
+            } else
+            {
+                turn++;
+                changePlayer();
+            }
         }
 
         public void validateOriginPosition(Position origin)
@@ -136,8 +142,37 @@ namespace chess.Chess
 
             }
             return false;
+        }
 
+        public bool itsInCheckMate(Color color)
+        {
+            if (!itsInCheck(color))
+                return false;
 
+            foreach (Part part in partsInGame(color))
+            {
+                bool[,] mat = part.possibleMoviments();
+
+                for (int i = 0; i < plank.Rows; i++)
+                {
+                    for (int j = 0; j < plank.Columns; j++)
+                    {
+                        if (mat[i, j])
+                        {
+                            Position origin = part.Position;
+                            Position destiny = new Position(i, j);
+                            Part capturedPart = movimentExecute(origin, destiny);
+                            bool inCheck = itsInCheck(color);
+                            undoMove(origin, destiny, capturedPart);
+
+                            if (!inCheck)
+                                return false;
+                        }
+                    }
+                }
+            }
+
+            return true;
         }
 
         public HashSet<Part> capturedParts(Color color)
@@ -161,12 +196,10 @@ namespace chess.Chess
 
         private void insertParts()
         {
-            insertNewPart('A', 8, new Tower(plank, Color.Black));
-            insertNewPart('H', 8, new Tower(plank, Color.Black));
-            insertNewPart('A', 1, new Tower(plank, Color.White));
-            insertNewPart('H', 1, new Tower(plank, Color.White));
+            insertNewPart('C', 1, new Tower(plank, Color.White));
+            insertNewPart('H', 8, new Tower(plank, Color.White));
 
-            insertNewPart('D', 8, new King(plank, Color.Black));
+            insertNewPart('A', 6, new King(plank, Color.Black));
             insertNewPart('E', 1, new King(plank, Color.White));
         }
     }

@@ -13,16 +13,23 @@ namespace chess
             Console.WriteLine();
             printPartsCaptured(match);
             Console.WriteLine("Turno: " + match.turn);
-
-            if (match.playerNow == Color.White)
-                Console.WriteLine("Aguardando jogada das peças BRANCAS");
-            else Console.WriteLine("Aguardando jogada das peças PRETAS");
-
-            if (match.check)
+            if (!match.finish)
             {
-                Console.WriteLine();
-                Console.WriteLine("Você está em CHEQUE!");
+                if (match.playerNow == Color.White)
+                    Console.WriteLine("Aguardando jogada das peças BRANCAS");
+                else Console.WriteLine("Aguardando jogada das peças PRETAS");
+
+                if (match.check)
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("Você está em CHEQUE!");
+                }
+            } else
+            {
+                Console.WriteLine("XequeMate!");
+                Console.WriteLine("Vencedor: " + match.playerNow);
             }
+
         }
 
         public static void printPartsCaptured(Chess.Match match)
