@@ -17,6 +17,12 @@ namespace chess
             if (match.playerNow == Color.White)
                 Console.WriteLine("Aguardando jogada das peças BRANCAS");
             else Console.WriteLine("Aguardando jogada das peças PRETAS");
+
+            if (match.check)
+            {
+                Console.WriteLine();
+                Console.WriteLine("Você está em CHEQUE!");
+            }
         }
 
         public static void printPartsCaptured(Chess.Match match)
@@ -29,6 +35,7 @@ namespace chess
             ConsoleColor aux = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Yellow;
             printSet(match.capturedParts(Color.Black));
+            Console.ForegroundColor = aux;
 
             Console.WriteLine();
             Console.WriteLine();

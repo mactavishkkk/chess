@@ -8,6 +8,7 @@ namespace chess.Chess
         public int turn { get; private set; }
         public Color playerNow;
         public bool finish { get; private set; }
+        public bool check { get; private set; }
         private HashSet<Part> parts;
         private HashSet<Part> capturedsParts;
 
@@ -22,7 +23,7 @@ namespace chess.Chess
             insertParts();
         }
 
-        public void movimentExecute(Position origin, Position destiny)
+        public Part movimentExecute(Position origin, Position destiny)
         {
             Part part = plank.removePart(origin);
             part.incrementMoviment();
@@ -31,11 +32,36 @@ namespace chess.Chess
 
             if (capturedPart != null)
                 capturedsParts.Add(capturedPart);
+
+            return capturedPart;
+        }
+
+        public void undoMove(Position origin, Position destiny, Part capturedPart)
+        {
+            Part part = plank.removePart(destiny);
+            part.decrementMoviment();
+
+            if (capturedPart != null)
+            {
+                plank.insertPart(capturedPart, destiny);
+                capturedsParts.Remove(capturedPart);
+            }
+            plank.insertPart(part, origin);
         }
 
         public void makeMove(Position origin, Position destiny)
         {
-            movimentExecute(origin, destiny);
+            Part capturedPart = movimentExecute(origin, destiny);
+            if (itsInCheck(playerNow))
+            {
+                undoMove(origin, destiny, capturedPart);
+                throw new PlankException("Você não pode se colocar em xeque!");
+            }
+
+            if (itsInCheck(adversary(playerNow)))
+                check = true;
+            else check = false;
+
             turn++;
             changePlayer();
         }
@@ -77,6 +103,41 @@ namespace chess.Chess
             }
             aux.ExceptWith(capturedParts(color));
             return aux;
+        }
+
+        private Color adversary(Color color)
+        {
+            if (color == Color.White)
+                return Color.Black;
+            else
+                return Color.White;
+        }
+
+        private Part selectKing(Color color)
+        {
+            foreach (Part part in partsInGame(color))
+                if (part is King)
+                    return part;
+
+            return null;
+        }
+
+        public bool itsInCheck(Color color)
+        {
+            Part king = selectKing(color);
+            if (king == null)
+                throw new PlankException("Não existe um rei da cor: " + color + " no tabuleiro!");
+
+            foreach (Part part in partsInGame(adversary(color)))
+            {
+                bool[,] mat = part.possibleMoviments();
+                if (mat[king.Position.Row, king.Position.Column])
+                    return true;
+
+            }
+            return false;
+
+
         }
 
         public HashSet<Part> capturedParts(Color color)
