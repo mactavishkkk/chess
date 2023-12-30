@@ -39,6 +39,16 @@ internal class Program
                     Console.WriteLine(e.Message);
                     Console.Write("Pressione 'Enter' para tentar novamente");
                     Console.ReadLine();
+                } catch (FormatException e)
+                {
+                    Console.WriteLine(e.Message);
+                    Console.Write("Pressione 'Enter' para tentar novamente");
+                    Console.ReadLine();
+                } catch (IndexOutOfRangeException e)
+                {
+                    Console.WriteLine(e.Message);
+                    Console.Write("Pressione 'Enter' para tentar novamente");
+                    Console.ReadLine();
                 }
             }
             Console.Clear();
