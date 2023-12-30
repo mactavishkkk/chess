@@ -86,7 +86,7 @@ namespace chess.Chess
 
         public void validateDestinyPosition(Position origin, Position destiny)
         {
-            if (!plank.getPart(origin).canMoveTo(destiny))
+            if (!plank.getPart(origin).possibleMoviment(destiny))
                 throw new PlankException("Posição de destino inválida!");
         }
 
@@ -196,11 +196,41 @@ namespace chess.Chess
 
         private void insertParts()
         {
-            insertNewPart('C', 1, new Tower(plank, Color.White));
-            insertNewPart('H', 8, new Tower(plank, Color.White));
-
-            insertNewPart('A', 6, new King(plank, Color.Black));
+            insertNewPart('A', 1, new Tower(plank, Color.White));
+            insertNewPart('B', 1, new Horse(plank, Color.White));
+            insertNewPart('C', 1, new Bishop(plank, Color.White));
+            insertNewPart('D', 1, new Queen(plank, Color.White));
             insertNewPart('E', 1, new King(plank, Color.White));
+            insertNewPart('F', 1, new Bishop(plank, Color.White));
+            insertNewPart('G', 1, new Horse(plank, Color.White));
+            insertNewPart('H', 1, new Tower(plank, Color.White));
+
+            insertNewPart('A', 2, new Pawn(plank, Color.White));
+            insertNewPart('B', 2, new Pawn(plank, Color.White));
+            insertNewPart('C', 2, new Pawn(plank, Color.White));
+            insertNewPart('D', 2, new Pawn(plank, Color.White));
+            insertNewPart('E', 2, new Pawn(plank, Color.White));
+            insertNewPart('F', 2, new Pawn(plank, Color.White));
+            insertNewPart('G', 2, new Pawn(plank, Color.White));
+            insertNewPart('H', 2, new Pawn(plank, Color.White));
+
+            insertNewPart('A', 8, new Tower(plank, Color.Black));
+            insertNewPart('B', 8, new Horse(plank, Color.Black));
+            insertNewPart('C', 8, new Bishop(plank, Color.Black));
+            insertNewPart('D', 8, new Queen(plank, Color.Black));
+            insertNewPart('E', 8, new King(plank, Color.Black));
+            insertNewPart('F', 8, new Bishop(plank, Color.Black));
+            insertNewPart('G', 8, new Horse(plank, Color.Black));
+            insertNewPart('H', 8, new Tower(plank, Color.Black));
+
+            insertNewPart('A', 7, new Pawn(plank, Color.Black));
+            insertNewPart('B', 7, new Pawn(plank, Color.Black));
+            insertNewPart('C', 7, new Pawn(plank, Color.Black));
+            insertNewPart('D', 7, new Pawn(plank, Color.Black));
+            insertNewPart('E', 7, new Pawn(plank, Color.Black));
+            insertNewPart('F', 7, new Pawn(plank, Color.Black));
+            insertNewPart('G', 7, new Pawn(plank, Color.Black));
+            insertNewPart('H', 7, new Pawn(plank, Color.Black));
         }
     }
 }

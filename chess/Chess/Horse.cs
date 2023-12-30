@@ -2,9 +2,9 @@
 
 namespace chess.Chess
 {
-    internal class King : Part
+    internal class Horse : Part
     {
-        public King(Plank plank, Color color) : base(color, plank) { }
+        public Horse(Plank plank, Color color) : base(color, plank) { }
 
         private bool CanMove(Position position)
         {
@@ -17,50 +17,57 @@ namespace chess.Chess
             bool[,] mat = new bool[Board.Rows, Board.Columns];
             Position position = new Position(0, 0);
 
-            // Up
-            position.valueDefine(Position.Row - 1, Position.Column);
+            // UpL
+            position.valueDefine(Position.Row - 2, Position.Column - 1);
             if (Board.validPosition(position) && CanMove(position))
             {
                 mat[position.Row, position.Column] = true;
             }
-            // URD
-            position.valueDefine(Position.Row - 1, position.Column + 1);
+
+            // UpR
+            position.valueDefine(Position.Row - 2, Position.Column + 1);
             if (Board.validPosition(position) && CanMove(position))
             {
                 mat[position.Row, position.Column] = true;
             }
-            // Right
-            position.valueDefine(Position.Row, Position.Column + 1);
+
+            // RightL
+            position.valueDefine(Position.Row - 1, Position.Column + 2);
             if (Board.validPosition(position) && CanMove(position))
             {
                 mat[position.Row, position.Column] = true;
             }
-            // LRD
-            position.valueDefine(Position.Row + 1, Position.Column + 1);
+
+            // RightR
+            position.valueDefine(Position.Row + 1, Position.Column + 2);
             if (Board.validPosition(position) && CanMove(position))
             {
                 mat[position.Row, position.Column] = true;
             }
-            // Down
-            position.valueDefine(Position.Row + 1, Position.Column);
+
+            // DownL
+            position.valueDefine(Position.Row + 2, Position.Column - 1);
             if (Board.validPosition(position) && CanMove(position))
             {
                 mat[position.Row, position.Column] = true;
             }
-            // LLD
-            position.valueDefine(Position.Row + 1, Position.Column - 1);
+
+            // DownR
+            position.valueDefine(Position.Row + 2, Position.Column + 1);
             if (Board.validPosition(position) && CanMove(position))
             {
                 mat[position.Row, position.Column] = true;
             }
-            // Left
-            position.valueDefine(Position.Row, Position.Column - 1);
+
+            // LeftR
+            position.valueDefine(Position.Row - 1, Position.Column - 2);
             if (Board.validPosition(position) && CanMove(position))
             {
                 mat[position.Row, position.Column] = true;
             }
-            // ULD
-            position.valueDefine(Position.Row - 1, Position.Column - 1);
+
+            // LeftL
+            position.valueDefine(Position.Row + 1, Position.Column - 2);
             if (Board.validPosition(position) && CanMove(position))
             {
                 mat[position.Row, position.Column] = true;
@@ -71,7 +78,7 @@ namespace chess.Chess
 
         public override string ToString()
         {
-            return "R";
+            return "H";
         }
     }
 }
