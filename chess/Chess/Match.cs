@@ -33,6 +33,26 @@ namespace chess.Chess
             if (capturedPart != null)
                 capturedsParts.Add(capturedPart);
 
+            // # Roque-light
+            if (part is King && destiny.Column == origin.Column + 2)
+            {
+                Position originTowerPosition = new Position(origin.Row, origin.Column + 3);
+                Position destinyTowerPosition = new Position(origin.Row, origin.Column + 1);
+                Part tower = plank.removePart(originTowerPosition);
+                //tower.incrementMoviment();
+                plank.insertPart(tower, destinyTowerPosition);
+            }
+
+            // # Roque-large
+            if (part is King && destiny.Column == origin.Column - 2)
+            {
+                Position originTowerPosition = new Position(origin.Row, origin.Column - 4);
+                Position destinyTowerPosition = new Position(origin.Row, origin.Column - 1);
+                Part tower = plank.removePart(originTowerPosition);
+                tower.incrementMoviment();
+                plank.insertPart(tower, destinyTowerPosition);
+            }
+
             return capturedPart;
         }
 
@@ -47,6 +67,26 @@ namespace chess.Chess
                 capturedsParts.Remove(capturedPart);
             }
             plank.insertPart(part, origin);
+
+            // # Roque-light
+            if (part is King && destiny.Column == origin.Column + 2)
+            {
+                Position originTowerPosition = new Position(origin.Column, origin.Column + 3);
+                Position destinyTowerPosition = new Position(origin.Column, origin.Column + 1);
+                Part tower = plank.removePart(originTowerPosition);
+                tower.decrementMoviment();
+                plank.insertPart(tower, originTowerPosition);
+            }
+
+            // # Roque-large
+            if (part is King && destiny.Column == origin.Column - 2)
+            {
+                Position originTowerPosition = new Position(origin.Column, origin.Column - 4);
+                Position destinyTowerPosition = new Position(origin.Column, origin.Column - 1);
+                Part tower = plank.removePart(originTowerPosition);
+                tower.decrementMoviment();
+                plank.insertPart(tower, originTowerPosition);
+            }
         }
 
         public void makeMove(Position origin, Position destiny)
@@ -200,7 +240,7 @@ namespace chess.Chess
             insertNewPart('B', 1, new Horse(plank, Color.White));
             insertNewPart('C', 1, new Bishop(plank, Color.White));
             insertNewPart('D', 1, new Queen(plank, Color.White));
-            insertNewPart('E', 1, new King(plank, Color.White));
+            insertNewPart('E', 1, new King(plank, Color.White, this));
             insertNewPart('F', 1, new Bishop(plank, Color.White));
             insertNewPart('G', 1, new Horse(plank, Color.White));
             insertNewPart('H', 1, new Tower(plank, Color.White));
@@ -218,7 +258,7 @@ namespace chess.Chess
             insertNewPart('B', 8, new Horse(plank, Color.Black));
             insertNewPart('C', 8, new Bishop(plank, Color.Black));
             insertNewPart('D', 8, new Queen(plank, Color.Black));
-            insertNewPart('E', 8, new King(plank, Color.Black));
+            insertNewPart('E', 8, new King(plank, Color.Black, this));
             insertNewPart('F', 8, new Bishop(plank, Color.Black));
             insertNewPart('G', 8, new Horse(plank, Color.Black));
             insertNewPart('H', 8, new Tower(plank, Color.Black));
