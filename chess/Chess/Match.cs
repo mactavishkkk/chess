@@ -9,6 +9,7 @@ namespace chess.Chess
         public Color playerNow;
         public bool finish { get; private set; }
         public bool check { get; private set; }
+        public Part partEnPassant { get; private set; }
         private HashSet<Part> parts;
         private HashSet<Part> capturedsParts;
 
@@ -39,7 +40,7 @@ namespace chess.Chess
                 Position originTowerPosition = new Position(origin.Row, origin.Column + 3);
                 Position destinyTowerPosition = new Position(origin.Row, origin.Column + 1);
                 Part tower = plank.removePart(originTowerPosition);
-                //tower.incrementMoviment();
+                tower.incrementMoviment();
                 plank.insertPart(tower, destinyTowerPosition);
             }
 
@@ -51,6 +52,24 @@ namespace chess.Chess
                 Part tower = plank.removePart(originTowerPosition);
                 tower.incrementMoviment();
                 plank.insertPart(tower, destinyTowerPosition);
+            }
+
+            // # En Passant
+            if (part is Pawn)
+            {
+                if (origin.Column != destiny.Column && capturedPart == null)
+                {
+                    Position pawn;
+                    if (part.Color == Color.White)
+                    {
+                        pawn = new Position(destiny.Row + 1, destiny.Column);
+                    } else
+                    {
+                        pawn = new Position(destiny.Row - 1, destiny.Column);
+                    }
+                    capturedPart = plank.removePart(pawn);
+                    capturedsParts.Add(capturedPart);
+                }
             }
 
             return capturedPart;
@@ -87,6 +106,24 @@ namespace chess.Chess
                 tower.decrementMoviment();
                 plank.insertPart(tower, originTowerPosition);
             }
+
+            // # En Passant
+            if (part is Pawn)
+            {
+                if (origin.Column != destiny.Column && capturedPart == partEnPassant)
+                {
+                    Part pawn = plank.removePart(destiny);
+                    Position pawnEP;
+                    if (part.Color == Color.White)
+                    {
+                        pawnEP = new Position(3, destiny.Column);
+                    } else
+                    {
+                        pawnEP = new Position(4, destiny.Column);
+                    }
+                    plank.insertPart(pawn, pawnEP);
+                }
+            }
         }
 
         public void makeMove(Position origin, Position destiny)
@@ -96,6 +133,21 @@ namespace chess.Chess
             {
                 undoMove(origin, destiny, capturedPart);
                 throw new PlankException("Você não pode se colocar em xeque!");
+            }
+
+            Part part = plank.getPart(destiny);
+
+            // # Promotion
+            if (part is Pawn)
+            {
+                if ((part.Color == Color.White && destiny.Row == 0) || (part.Color == Color.Black && destiny.Row == 7))
+                {
+                    part = plank.removePart(destiny);
+                    parts.Remove(part);
+                    Part queen = new Queen(plank, part.Color);
+                    plank.insertPart(queen, destiny);
+                    parts.Add(queen);
+                }
             }
 
             if (itsInCheck(adversary(playerNow)))
@@ -110,6 +162,11 @@ namespace chess.Chess
                 turn++;
                 changePlayer();
             }
+
+            // # En Passant
+            if (part is Pawn && (destiny.Row == origin.Row - 2 || destiny.Row == origin.Row + 2))
+                partEnPassant = part;
+            else partEnPassant = null;
         }
 
         public void validateOriginPosition(Position origin)
@@ -245,14 +302,14 @@ namespace chess.Chess
             insertNewPart('G', 1, new Horse(plank, Color.White));
             insertNewPart('H', 1, new Tower(plank, Color.White));
 
-            insertNewPart('A', 2, new Pawn(plank, Color.White));
-            insertNewPart('B', 2, new Pawn(plank, Color.White));
-            insertNewPart('C', 2, new Pawn(plank, Color.White));
-            insertNewPart('D', 2, new Pawn(plank, Color.White));
-            insertNewPart('E', 2, new Pawn(plank, Color.White));
-            insertNewPart('F', 2, new Pawn(plank, Color.White));
-            insertNewPart('G', 2, new Pawn(plank, Color.White));
-            insertNewPart('H', 2, new Pawn(plank, Color.White));
+            insertNewPart('A', 2, new Pawn(plank, Color.White, this));
+            insertNewPart('B', 2, new Pawn(plank, Color.White, this));
+            insertNewPart('C', 2, new Pawn(plank, Color.White, this));
+            insertNewPart('D', 2, new Pawn(plank, Color.White, this));
+            insertNewPart('E', 2, new Pawn(plank, Color.White, this));
+            insertNewPart('F', 2, new Pawn(plank, Color.White, this));
+            insertNewPart('G', 2, new Pawn(plank, Color.White, this));
+            insertNewPart('H', 2, new Pawn(plank, Color.White, this));
 
             insertNewPart('A', 8, new Tower(plank, Color.Black));
             insertNewPart('B', 8, new Horse(plank, Color.Black));
@@ -263,14 +320,14 @@ namespace chess.Chess
             insertNewPart('G', 8, new Horse(plank, Color.Black));
             insertNewPart('H', 8, new Tower(plank, Color.Black));
 
-            insertNewPart('A', 7, new Pawn(plank, Color.Black));
-            insertNewPart('B', 7, new Pawn(plank, Color.Black));
-            insertNewPart('C', 7, new Pawn(plank, Color.Black));
-            insertNewPart('D', 7, new Pawn(plank, Color.Black));
-            insertNewPart('E', 7, new Pawn(plank, Color.Black));
-            insertNewPart('F', 7, new Pawn(plank, Color.Black));
-            insertNewPart('G', 7, new Pawn(plank, Color.Black));
-            insertNewPart('H', 7, new Pawn(plank, Color.Black));
+            insertNewPart('A', 7, new Pawn(plank, Color.Black, this));
+            insertNewPart('B', 7, new Pawn(plank, Color.Black, this));
+            insertNewPart('C', 7, new Pawn(plank, Color.Black, this));
+            insertNewPart('D', 7, new Pawn(plank, Color.Black, this));
+            insertNewPart('E', 7, new Pawn(plank, Color.Black, this));
+            insertNewPart('F', 7, new Pawn(plank, Color.Black, this));
+            insertNewPart('G', 7, new Pawn(plank, Color.Black, this));
+            insertNewPart('H', 7, new Pawn(plank, Color.Black, this));
         }
     }
 }

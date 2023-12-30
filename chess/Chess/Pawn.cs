@@ -4,7 +4,12 @@ namespace chess.Chess
 {
     internal class Pawn : Part
     {
-        public Pawn(Plank plank, Color color) : base(color, plank) { }
+        public Pawn(Plank plank, Color color, Match match) : base(color, plank)
+        {
+            this.Match = match;
+        }
+
+        private Match Match;
 
         private bool CanMove(Position position)
         {
@@ -53,6 +58,22 @@ namespace chess.Chess
                 {
                     mat[position.Row, position.Column] = true;
                 }
+
+                // # En Passant
+                if (Position.Row == 3)
+                {
+                    Position partLeft = new Position(Position.Row, Position.Column - 1);
+                    if (Board.validPosition(partLeft) && enemyExists(partLeft) && Board.getPart(partLeft) == Match.partEnPassant)
+                    {
+                        mat[partLeft.Row - 1, partLeft.Column] = true;
+                    }
+
+                    Position partRight = new Position(Position.Row, Position.Column + 1);
+                    if (Board.validPosition(partRight) && enemyExists(partRight) && Board.getPart(partRight) == Match.partEnPassant)
+                    {
+                        mat[partRight.Row - 1, partRight.Column] = true;
+                    }
+                }
             } else
             {
                 position.valueDefine(Position.Row + 1, Position.Column);
@@ -77,6 +98,22 @@ namespace chess.Chess
                 if (Board.validPosition(position) && enemyExists(position))
                 {
                     mat[position.Row, position.Column] = true;
+                }
+
+                // # En Passant
+                if (Position.Row == 4)
+                {
+                    Position partLeft = new Position(Position.Row, Position.Column - 1);
+                    if (Board.validPosition(partLeft) && enemyExists(partLeft) && Board.getPart(partLeft) == Match.partEnPassant)
+                    {
+                        mat[partLeft.Row + 1, partLeft.Column] = true;
+                    }
+
+                    Position partRight = new Position(Position.Row, Position.Column + 1);
+                    if (Board.validPosition(partRight) && enemyExists(partRight) && Board.getPart(partRight) == Match.partEnPassant)
+                    {
+                        mat[partRight.Row + 1, partRight.Column] = true;
+                    }
                 }
             }
 
